@@ -5,10 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PiClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="500">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Number of Digits:" HorizontalContentAlignment="right"/>
+        <TextBox Grid.Row="0" Grid.Column="1"  Margin="5 2 5 2" Name="txDigits"></TextBox>
+        <Button Grid.Row="1" Grid.Column="0" Name="btnBgWorker" Click="btnBgWorker_Click" Margin="50">BackgroundWorker</Button>
+        <Label Grid.Row="2" Grid.Column="0" Name="lbPerformance">ph</Label>
+        
     </Grid>
 </Window>
