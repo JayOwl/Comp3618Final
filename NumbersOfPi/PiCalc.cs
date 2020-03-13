@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,9 @@ namespace NumbersOfPi
             if (this.calcBtn.Text == "Calculate")
             {
                 timer1.Start();
+                //Add stopwatch for timer
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
 
                 // Just a simple object to hold some values to be accessed globally
                 pi = new PIObject
@@ -45,6 +49,10 @@ namespace NumbersOfPi
                 backgroundWorker1.RunWorkerAsync(pi);
                 progressBar1.Maximum = pi.num - 1;
                 calcBtn.Text = "Cancel";
+
+                stopWatch.Stop();       
+                TimeSpan ts = stopWatch.Elapsed;
+                txtBox_StopWatch.Text = ts.ToString() ;
                 //calcBtn.Text = "Completed";
             }
             else

@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.txtBox_StopWatch = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this._digits)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +60,7 @@
             // progressBar1
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 184);
+            this.progressBar1.Location = new System.Drawing.Point(0, 229);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(293, 23);
             this.progressBar1.Step = 1;
@@ -92,11 +93,19 @@
             this.backgroundWorker1.WorkerSupportsCancellation = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
+            // txtBox_StopWatch
+            // 
+            this.txtBox_StopWatch.Location = new System.Drawing.Point(193, 194);
+            this.txtBox_StopWatch.Name = "txtBox_StopWatch";
+            this.txtBox_StopWatch.Size = new System.Drawing.Size(100, 20);
+            this.txtBox_StopWatch.TabIndex = 5;
+            // 
             // PiCalc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(293, 207);
+            this.ClientSize = new System.Drawing.Size(293, 252);
+            this.Controls.Add(this.txtBox_StopWatch);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtBoxPi);
             this.Controls.Add(this.progressBar1);
@@ -120,6 +129,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.TextBox txtBox_StopWatch;
     }
 }
 
