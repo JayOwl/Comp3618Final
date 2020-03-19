@@ -1,0 +1,47 @@
+﻿<Window x:Class="FileIOClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileIOClient"
+        mc:Ignorable="d"
+        Title="IOClient" Height="300" Width="500">
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="10">Method1</Button>
+            <Button Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Margin="10">Method2</Button>
+            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10">Method3</Button>
+            <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" Margin="10">Method4</Button>
+
+            <Button Grid.Row="2" Grid.Column="0" Margin="5">Save</Button>
+            <Label Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Name="lbPerformance" VerticalContentAlignment="Center">current results ph</Label>
+
+            <Button Grid.Row="3" Grid.Column="0" Margin="5">Retrieve</Button>
+            <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="2" VerticalAlignment="Center">
+                <ComboBoxItem IsSelected="True">Method1</ComboBoxItem>
+                <ComboBoxItem>Method2</ComboBoxItem>
+                <ComboBoxItem>Method3</ComboBoxItem>
+                <ComboBoxItem>Method4</ComboBoxItem>
+            </ComboBox>
+            <Label Grid.Row="4" Grid.Column="3" VerticalContentAlignment="Center">saved results ph</Label>
+
+        </Grid>
+
+    </Grid>
+</Window>
