@@ -75,8 +75,20 @@ namespace PiClient {
 
         #region Task
         private void btnTask_Click(object sender, RoutedEventArgs e) {
+            int digits = int.Parse(txDigits.Text);
+
+            Task.Run(async () => {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                calcPi(digits);
+                stopwatch.Stop();
+                await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = stopwatch.ElapsedMilliseconds);
+            });
 
         }
+
+
 
         #endregion
 
