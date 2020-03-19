@@ -34,7 +34,11 @@ namespace FileIOClient {
             ThreadPool.SetMaxThreads(Environment.ProcessorCount, Environment.ProcessorCount * 2);
             Thread.CurrentThread.Name = "UI Thread";
 
-            watcher.Path = "C:\\finaltest";
+            //watcher.Path = "C:\\finaltest";
+            string workingDirectory = Environment.CurrentDirectory;
+
+            watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
+
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
             watcher.Changed += FswOnChanged;
             watcher.Created += FswOnChanged;
