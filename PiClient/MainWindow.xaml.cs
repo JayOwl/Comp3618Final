@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using NumbersOfPi;
 using System.Diagnostics;
+using System.Threading;
 
 namespace PiClient {
     /// <summary>
@@ -90,16 +91,21 @@ namespace PiClient {
         #endregion
 
         private void test(object sender, RoutedEventArgs e) {
-            int digits = int.Parse(txDigits.Text);
+            Thread test = new Thread(paraTest);
+            test.Start(int.Parse(txDigits.Text));
+        }
+
+        private void paraTest(object arg) {
+
             Stopwatch sw = new Stopwatch();
-            var uiFactory = new TaskFactory(TaskScheduler.FromCurrentSynchronizationContext());
+
             sw.Start();
             Parallel.For(0, 1, i => {
-                calcPi(digits);
+                calcPi((int)arg);
                 sw.Stop();
-                uiFactory.StartNew(() => lbPerformance.Content = sw.ElapsedMilliseconds);
-            });
+                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds);
 
+            });
         }
 
     }
