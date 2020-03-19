@@ -5,25 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PiClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="500">
+        Title="Pi Client" Height="300" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Number of Digits:" HorizontalContentAlignment="right"/>
-        <TextBox Grid.Row="0" Grid.Column="1"  Margin="5 2 5 2" Name="txDigits"></TextBox>
-        <Button Grid.Row="1" Grid.Column="0" Name="btnBgWorker" Click="btnBgWorker_Click" Margin="50">BackgroundWorker</Button>
-        <Button Grid.Row="1" Grid.Column="2" Name="btnTask" Click="btnTask_Click" Margin="50">Task</Button>
-        <Button Grid.Row="2" Grid.Column="2" Name="btnP" Click="test" Margin="50">test</Button>
-
-        <Label Grid.Row="2" Grid.Column="0" Name="lbPerformance">ph</Label>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Number of Digits:" HorizontalContentAlignment="right"/>
+        <TextBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="4" Margin="5 2 5 2" Name="txDigits"></TextBox>
         
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Name="btnBgWorker" Click="btnBgWorker_Click" >BackgroundWorker</Button>
+        <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="10" Name="btnTask" Click="btnTask_Click">Task</Button>
+        <Button Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Margin="10" Name="btnP" Click="test" >test</Button>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="10">method4</Button>
+        <Button Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Margin="10">method5</Button>
+
+        <Button Grid.Row="3" Grid.Column="0" Margin="5">Save</Button>
+        <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Name="lbPerformance" VerticalContentAlignment="Center">current results ph</Label>
+
+        <Button Grid.Row="4" Grid.Column="0" Margin="5">Retrieve</Button>
+        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="2" VerticalAlignment="Center">
+            <ComboBoxItem IsSelected="True">Method1</ComboBoxItem>
+            <ComboBoxItem>Method2</ComboBoxItem>
+            <ComboBoxItem>Method3</ComboBoxItem>
+            <ComboBoxItem>Method4</ComboBoxItem>
+            <ComboBoxItem>Method5</ComboBoxItem>
+        </ComboBox>
+        <Label Grid.Row="4" Grid.Column="3" VerticalContentAlignment="Center"> saved results ph</Label>
+
     </Grid>
 </Window>
