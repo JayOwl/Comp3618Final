@@ -43,7 +43,7 @@
             <ComboBoxItem>Method4</ComboBoxItem>
             <ComboBoxItem>Method5</ComboBoxItem>
         </ComboBox>
-        <Label Grid.Row="4" Grid.Column="3" VerticalContentAlignment="Center"> saved results ph</Label>
+        <Label Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" VerticalContentAlignment="Center"> saved results ph</Label>
 
     </Grid>
 </Window>
