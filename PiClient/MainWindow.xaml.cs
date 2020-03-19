@@ -87,11 +87,20 @@ namespace PiClient {
             });
 
         }
-
-
-
         #endregion
 
+        private void test(object sender, RoutedEventArgs e) {
+            int digits = int.Parse(txDigits.Text);
+            Stopwatch sw = new Stopwatch();
+            var uiFactory = new TaskFactory(TaskScheduler.FromCurrentSynchronizationContext());
+            sw.Start();
+            Parallel.For(0, 1, i => {
+                calcPi(digits);
+                sw.Stop();
+                uiFactory.StartNew(() => lbPerformance.Content = sw.ElapsedMilliseconds);
+            });
+
+        }
 
     }
 }

@@ -21,6 +21,7 @@
         <TextBox Grid.Row="0" Grid.Column="1"  Margin="5 2 5 2" Name="txDigits"></TextBox>
         <Button Grid.Row="1" Grid.Column="0" Name="btnBgWorker" Click="btnBgWorker_Click" Margin="50">BackgroundWorker</Button>
         <Button Grid.Row="1" Grid.Column="2" Name="btnTask" Click="btnTask_Click" Margin="50">Task</Button>
+        <Button Grid.Row="2" Grid.Column="2" Name="btnP" Click="test" Margin="50">test</Button>
 
         <Label Grid.Row="2" Grid.Column="0" Name="lbPerformance">ph</Label>
         
