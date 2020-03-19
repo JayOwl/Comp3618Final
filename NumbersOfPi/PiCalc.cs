@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,13 @@ namespace NumbersOfPi
         {
             if (this.calcBtn.Text == "Calculate")
             {
+                // Clear the field first
+                txtBoxPi.Clear();
+
                 timer1.Start();
+                //Add stopwatch for timer
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
 
                 // Just a simple object to hold some values to be accessed globally
                 pi = new PIObject
@@ -43,16 +50,20 @@ namespace NumbersOfPi
                     prog = 0
                 };
                 backgroundWorker1.RunWorkerAsync(pi);
-                progressBar1.Maximum = pi.num - 1;
+                // Leave the maximum as the default. We'll do a percentage calculation on the tick
+                //progressBar1.Maximum = pi.num >= 1? pi.num - 1:0;
                 calcBtn.Text = "Cancel";
+
+                stopWatch.Stop();       
+                TimeSpan ts = stopWatch.Elapsed;
+                txtBox_StopWatch.Text = ts.ToString() ;
                 //calcBtn.Text = "Completed";
             }
             else
             {
                 timer1.Stop();
-                                
                 backgroundWorker1.CancelAsync();
-            
+                calcBtn.Text = "Calculate";
             }
 
         }
@@ -101,8 +112,17 @@ namespace NumbersOfPi
         private void timer1_Tick(object sender, EventArgs e)
         {
             txtBoxPi.Text = pi.calculatedValue;
-            progressBar1.Value = pi.prog;
-
+            if (pi.num > 0 && pi.num > pi.prog)
+            {
+                // Cast a percentage to an int
+                progressBar1.Value = (int)(pi.prog * 100 / pi.num);
+            }
+            else
+            {
+                // Hey, we're done!
+                progressBar1.Value = progressBar1.Maximum;
+                calcBtn.Text = "Calculate";
+            }
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

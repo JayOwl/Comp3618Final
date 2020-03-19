@@ -1,0 +1,28 @@
+﻿<Window x:Class="PiClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PiClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Number of Digits:" HorizontalContentAlignment="right"/>
+        <TextBox Grid.Row="0" Grid.Column="1"  Margin="5 2 5 2" Name="txDigits"></TextBox>
+        <Button Grid.Row="1" Grid.Column="0" Name="btnBgWorker" Click="btnBgWorker_Click" Margin="50">BackgroundWorker</Button>
+        <Button Grid.Row="1" Grid.Column="2" Name="btnTask" Click="btnTask_Click" Margin="50">Task</Button>
+
+        <Label Grid.Row="2" Grid.Column="0" Name="lbPerformance">ph</Label>
+        
+    </Grid>
+</Window>
