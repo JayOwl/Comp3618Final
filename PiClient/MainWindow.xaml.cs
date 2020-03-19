@@ -33,24 +33,30 @@ namespace PiClient {
             
         }
 
+        private void calcPi(int digits) {
+            //StringBuilder pi = new StringBuilder("3", digits + 2);
+            if (digits > 0) {
+                //pi.Append(".");
+                for (int i = 0; i < digits; i += 9) {
+
+                    //int nineDigits = 
+                    NineDigitsOfPi.StartingAt(i + 1);
+                    //int digitCount = 
+                    Math.Min(digits - i, 9);
+                    //string ds = string.Format("{0:D9}", nineDigits);
+                    //pi.Append(ds.Substring(0, digitCount));
+
+                }
+            }
+        }
+
         #region BackgroundWorker
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e) {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             
             int digits = (int)e.Argument;
-            //StringBuilder pi = new StringBuilder("3", digits + 2);
-            if (digits > 0) {
-                //pi.Append(".");
-                for (int i = 0; i < digits; i += 9) {
-
-                    int nineDigits = NineDigitsOfPi.StartingAt(i + 1);
-                    int digitCount = Math.Min(digits - i, 9);
-                    //string ds = string.Format("{0:D9}", nineDigits);
-                    //pi.Append(ds.Substring(0, digitCount));
-
-                }
-            }
+            calcPi(digits);
 
             stopwatch.Stop();
             e.Result = stopwatch.ElapsedMilliseconds;
@@ -65,6 +71,13 @@ namespace PiClient {
                 bgWorker.RunWorkerAsync(int.Parse(txDigits.Text));
             }
         }
+        #endregion
+
+        #region Task
+        private void btnTask_Click(object sender, RoutedEventArgs e) {
+
+        }
+
         #endregion
 
 
