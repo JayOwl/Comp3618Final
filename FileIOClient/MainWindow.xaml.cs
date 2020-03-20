@@ -34,10 +34,10 @@ namespace FileIOClient {
             ThreadPool.SetMaxThreads(Environment.ProcessorCount, Environment.ProcessorCount * 2);
             Thread.CurrentThread.Name = "UI Thread";
 
-            //watcher.Path = "C:\\finaltest";
-            string workingDirectory = Environment.CurrentDirectory;
+            watcher.Path = "C:\\finaltest";
+            //string workingDirectory = Environment.CurrentDirectory;
 
-            watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
+            //watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
 
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
             watcher.Changed += FswOnChanged;
@@ -53,17 +53,29 @@ namespace FileIOClient {
             }
         }
 
+        private int GetFileLength(string path) {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            string text = File.ReadAllText(path);
+            sw.Stop();
+            Debug.WriteLine(text.Length + " " + sw.ElapsedMilliseconds);
+            return text.Length;
+        }
 
+        private void TaskButton_Click(object sender, RoutedEventArgs e) {
+            Thread test = new Thread(GetFileLengthTask);
 
-        private void test2() {
+            test.Start();
+        }
+
+        private void GetFileLengthTask() {
             Task.Run(async () => {
                 Stopwatch sw = new Stopwatch();
                 List<Thread> threads = new List<Thread>();
                 sw.Start();
 
-
                 foreach (string path in paths) {
-                    Thread thread = new Thread(() => test3(path));
+                    Thread thread = new Thread(() => GetFileLength(path));
                     threads.Add(thread);
                     thread.Start();
                 }
@@ -78,19 +90,17 @@ namespace FileIOClient {
 
         }
 
-        private int test3(string path) {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            string text = File.ReadAllText(path);
-            sw.Stop();
-            Debug.WriteLine(text.Length + " " + sw.ElapsedMilliseconds);
-            return text.Length;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            Thread test = new Thread(test2);
-
-            test.Start();
+        private void ParaForButton_Click(object sender, RoutedEventArgs e) {
+            Thread thread = new Thread(() => {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                Parallel.For(0, paths.Count, i => {
+                    GetFileLength(paths[i]);
+                });
+                sw.Stop();
+                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
+            });
+            thread.Start();
         }
     }
 }
