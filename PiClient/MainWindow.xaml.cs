@@ -104,7 +104,8 @@ namespace PiClient {
                 calcPi((int)arg);
                 sw.Stop();
                 lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds);
-
+                // Should the sw.Stop() and performance data not occur outside the for loop? The code inside may be run in parallel, and we only want it to stop once.
+                // I haven't tested/debugged it though
             });
         }
 
