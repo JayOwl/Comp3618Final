@@ -37,11 +37,12 @@ namespace FileIOClient {
             ThreadPool.SetMaxThreads(Environment.ProcessorCount, Environment.ProcessorCount * 2);
             Thread.CurrentThread.Name = "UI Thread";
 
+            #region change this later
             //watcher.Path = "C:\\finaltest";
             string workingDirectory = Environment.CurrentDirectory;
-
             watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
-
+            #endregion
+            
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
             watcher.Changed += FswOnChanged;
             watcher.Created += FswOnChanged;
@@ -111,7 +112,48 @@ namespace FileIOClient {
         }
 
         private void PoolButton_Click(object sender, RoutedEventArgs e) {
+            Thread thread = new Thread(() => {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
 
+                int temp = paths.Count;
+                AutoResetEvent done = new AutoResetEvent(false);
+                foreach(string path in paths) {
+                    ThreadPool.QueueUserWorkItem(state => {
+                        GetFileLength(path);
+                        if (0 == Interlocked.Decrement(ref temp)) {
+                            done.Set();
+                        }
+                    });
+                }
+                done.WaitOne();
+                
+                sw.Stop();
+                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
+                methodName = "io.Threadpool";
+                elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
+            });
+            thread.Start();
+        }
+
+        private void ParaTaskButton_Click(object sender, RoutedEventArgs e) {
+            //the paralell class doesnt contain anything to do with tasks but "parallel task" is what was written on the whiteboard
+            //so im just going to have a parallel loop make some tasks
+            
+            Thread thread = new Thread(() => {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                Parallel.For(0, paths.Count, i => {
+                    Task.Run(() => {
+                        GetFileLength(paths[i]);
+                    });
+                });
+                sw.Stop();
+                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
+                methodName = "io.ParallelTask";
+                elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
+            });
+            thread.Start();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
