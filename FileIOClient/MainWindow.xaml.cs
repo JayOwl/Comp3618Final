@@ -24,7 +24,10 @@ namespace FileIOClient {
 
         private FileSystemWatcher watcher = new FileSystemWatcher();
         private List<String> paths = new List<string>();
-        
+        //save these to database later
+        private string elapsedTime = "";
+        private string methodName = "";
+
         public MainWindow() {
             InitializeComponent();
             Loaded += OnLoad;
@@ -47,9 +50,9 @@ namespace FileIOClient {
 
         private void FswOnChanged(object source, FileSystemEventArgs e) {
             //filesystemwatcher events can fire multiple times for the same file, so this checks for dupes before adding
-            if (!paths.Contains(e.FullPath)) { 
+            if (!paths.Contains(e.FullPath)) {
                 paths.Add(e.FullPath);
-                System.Diagnostics.Debug.Print(e.FullPath + " added");
+                Debug.Print(e.FullPath + " added");
             }
         }
 
@@ -85,6 +88,8 @@ namespace FileIOClient {
                 }
                 sw.Stop();
                 await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
+                methodName = "io.Task";
+                elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
             });
 
 
@@ -99,8 +104,18 @@ namespace FileIOClient {
                 });
                 sw.Stop();
                 lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
+                methodName = "io.Parallel.For";
+                elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
             });
             thread.Start();
+        }
+
+        private void PoolButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            Debug.WriteLine(methodName + "," + elapsedTime);
         }
     }
 }

@@ -26,10 +26,10 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Click="TaskButton_Click">Task</Button>
             <Button Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Margin="10" Click="ParaForButton_Click">Parallel.For</Button>
-            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10">Method3</Button>
+            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Click="PoolButton_Click">Threadpool</Button>
             <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" Margin="10">Method4</Button>
 
-            <Button Grid.Row="2" Grid.Column="0" Margin="5">Save</Button>
+            <Button Grid.Row="2" Grid.Column="0" Margin="5" Click="SaveButton_Click">Save</Button>
             <Label Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Name="lbPerformance" VerticalContentAlignment="Center">current results ph</Label>
 
             <Button Grid.Row="3" Grid.Column="0" Margin="5">Retrieve</Button>

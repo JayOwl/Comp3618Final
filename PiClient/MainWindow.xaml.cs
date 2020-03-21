@@ -23,6 +23,9 @@ namespace PiClient {
     /// </summary>
     public partial class MainWindow : Window {
         private readonly BackgroundWorker bgWorker = new BackgroundWorker();
+        //save these to database later
+        private string elapsedTime = "";
+        private string methodName = "";
         public MainWindow() {
             InitializeComponent();
             Loaded += piClient_loaded;
@@ -65,6 +68,8 @@ namespace PiClient {
 
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             lbPerformance.Content = "Performance: " + e.Result + "ms";
+            elapsedTime = e.Result + "ms";
+            methodName = "cpu.BackgroundWorker";
         }
 
         private void btnBgWorker_Click(object sender, RoutedEventArgs e) {
@@ -77,37 +82,41 @@ namespace PiClient {
         #region Task
         private void btnTask_Click(object sender, RoutedEventArgs e) {
             int digits = int.Parse(txDigits.Text);
-
+            Stopwatch stopwatch = new Stopwatch();
             Task.Run(async () => {
-                Stopwatch stopwatch = new Stopwatch();
+                
                 stopwatch.Start();
 
                 calcPi(digits);
                 stopwatch.Stop();
                 await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = stopwatch.ElapsedMilliseconds);
+                elapsedTime = stopwatch.ElapsedMilliseconds.ToString() + "ms";
             });
-
+            methodName = "cpu.Task";
         }
         #endregion
 
         private void test(object sender, RoutedEventArgs e) {
-            Thread test = new Thread(paraTest);
-            test.Start(int.Parse(txDigits.Text));
+            //Thread test = new Thread(paraTest);
+            //test.Start(int.Parse(txDigits.Text));
         }
 
         private void paraTest(object arg) {
 
-            Stopwatch sw = new Stopwatch();
+            //Stopwatch sw = new Stopwatch();
 
-            sw.Start();
-            Parallel.For(0, 1, i => {
-                calcPi((int)arg);
-                sw.Stop();
-                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds);
-                // Should the sw.Stop() and performance data not occur outside the for loop? The code inside may be run in parallel, and we only want it to stop once.
-                // I haven't tested/debugged it though
-            });
+            //sw.Start();
+            //Parallel.For(0, 1, i => {
+            //    calcPi((int)arg);
+            //    sw.Stop();
+            //    lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds);
+            //    // Should the sw.Stop() and performance data not occur outside the for loop? The code inside may be run in parallel, and we only want it to stop once.
+            //    // I haven't tested/debugged it though
+            //});
         }
 
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            Debug.WriteLine(methodName + "," + elapsedTime);
+        }
     }
 }
