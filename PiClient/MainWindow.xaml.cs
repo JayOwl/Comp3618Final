@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
-using NumbersOfPi;
 using System.Diagnostics;
 using System.Threading;
 
@@ -24,32 +23,36 @@ namespace PiClient {
     public partial class MainWindow : Window {
         private readonly BackgroundWorker bgWorker = new BackgroundWorker();
         //save these to database later
-        private string elapsedTime = "";
-        private string methodName = "";
+        public string ElapsedTime { get; set; }
+        public string MethodName { get; set; }
+
+        // Calculation in-progress flag
+        private bool IsCalculating { get; set; }
+        
+        // Ctor
         public MainWindow() {
             InitializeComponent();
             Loaded += piClient_loaded;
+            IsCalculating = false;
         }
 
+        // Application loaded event handler
         private void piClient_loaded(object sender, RoutedEventArgs e) {
             bgWorker.DoWork += bgWorker_DoWork;
-            bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;
-            
+            bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;            
         }
 
+        // Calculate digts of pi using the provided algorithm
         private void calcPi(int digits) {
-            //StringBuilder pi = new StringBuilder("3", digits + 2);
+            StringBuilder pi = new StringBuilder("3", digits + 2);
             if (digits > 0) {
-                //pi.Append(".");
+                pi.Append(".");
                 for (int i = 0; i < digits; i += 9) {
 
-                    //int nineDigits = 
-                    NineDigitsOfPi.StartingAt(i + 1);
-                    //int digitCount = 
-                    Math.Min(digits - i, 9);
-                    //string ds = string.Format("{0:D9}", nineDigits);
-                    //pi.Append(ds.Substring(0, digitCount));
-
+                    int nineDigits = NineDigitsOfPi.StartingAt(i + 1);
+                    int digitCount = Math.Min(digits - i, 9);
+                    string ds = string.Format("{0:D9}", nineDigits);
+                    pi.Append(ds.Substring(0, digitCount));
                 }
             }
         }
@@ -59,8 +62,8 @@ namespace PiClient {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             
-            int digits = (int)e.Argument;
-            calcPi(digits);
+            int digitsOfPi = (int)e.Argument;
+            calcPi(digitsOfPi);
 
             stopwatch.Stop();
             e.Result = stopwatch.ElapsedMilliseconds;
@@ -68,31 +71,42 @@ namespace PiClient {
 
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             lbPerformance.Content = "Performance: " + e.Result + "ms";
-            elapsedTime = e.Result + "ms";
-            methodName = "cpu.BackgroundWorker";
+            ElapsedTime = e.Result + "ms";
+            MethodName = "cpu.BackgroundWorker";
         }
 
+        // Run Async background worker
         private void btnBgWorker_Click(object sender, RoutedEventArgs e) {
-            if (!bgWorker.IsBusy) {
-                bgWorker.RunWorkerAsync(int.Parse(txDigits.Text));
-            }
+            // Validate data first
+            int digitsOfPi;
+            if(int.TryParse(txDigits.Text, out digitsOfPi))
+            {
+                if (!bgWorker.IsBusy)
+                {
+                    bgWorker.RunWorkerAsync(digitsOfPi);
+                }
+            }            
         }
         #endregion
 
         #region Task
         private void btnTask_Click(object sender, RoutedEventArgs e) {
-            int digits = int.Parse(txDigits.Text);
-            Stopwatch stopwatch = new Stopwatch();
-            Task.Run(async () => {
-                
-                stopwatch.Start();
+            int digitsOfPi;
 
-                calcPi(digits);
-                stopwatch.Stop();
-                await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = stopwatch.ElapsedMilliseconds);
-                elapsedTime = stopwatch.ElapsedMilliseconds.ToString() + "ms";
-            });
-            methodName = "cpu.Task";
+            // Validate input before anything else
+            if (int.TryParse(txDigits.Text, out digitsOfPi)){
+                
+                
+                Task.Run(async () => {
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    calcPi(digitsOfPi);
+                    stopwatch.Stop();
+                    ElapsedTime = "Performance: " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                    await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);                    
+                    MethodName = "cpu.Task";
+                });
+            }
         }
         #endregion
 
@@ -116,7 +130,64 @@ namespace PiClient {
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
-            Debug.WriteLine(methodName + "," + elapsedTime);
+            Debug.WriteLine(MethodName + "," + ElapsedTime);
+            // Save to Database from here
+        }
+
+        private void btnThreadPool_Click(object sender, RoutedEventArgs e)
+        {
+            int digitsOfPi;
+            int numberOfThreads = 1;        // This is a single-threaded non-parallelizable algorithm
+            // Validate input before anything else
+            if (int.TryParse(txDigits.Text, out digitsOfPi))
+            {
+                int newint = digitsOfPi;
+                Thread thread = new Thread(() =>
+                {
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    AutoResetEvent done = new AutoResetEvent(false);
+                    
+                    ThreadPool.QueueUserWorkItem(state => {
+                        calcPi(digitsOfPi);
+                        if (0 == Interlocked.Decrement(ref numberOfThreads))
+                        {
+                            done.Set();
+                        }
+                    });                    
+                    done.WaitOne();
+
+                    stopwatch.Stop();
+                    ElapsedTime = "Performance: " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                    lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);
+                    MethodName = "cpu.ThreadPool";
+                });
+                thread.Start();
+            }
+        }
+
+        private void btnParallelFor_Click(object sender, RoutedEventArgs e)
+        {
+            int digitsOfPi;
+            int numberOfThreads = 1;         // This is a single-threaded non-parallelizable algorithm
+
+            // Validate input before anything else
+            if (int.TryParse(txDigits.Text, out digitsOfPi))
+            {
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                Parallel.For(0, numberOfThreads, i =>
+                {
+                    calcPi(digitsOfPi);
+                });
+
+                stopwatch.Stop();
+                ElapsedTime = "Performance: " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);
+                MethodName = "cpu.ParallelFor";
+            }            
         }
     }
 }
+    
