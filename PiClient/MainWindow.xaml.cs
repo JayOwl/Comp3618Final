@@ -28,7 +28,7 @@ namespace PiClient {
 
         // Calculation in-progress flag
         private bool IsCalculating { get; set; }
-        
+
         // Ctor
         public MainWindow() {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace PiClient {
         // Application loaded event handler
         private void piClient_loaded(object sender, RoutedEventArgs e) {
             bgWorker.DoWork += bgWorker_DoWork;
-            bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;            
+            bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;
         }
 
         // Calculate digts of pi using the provided algorithm
@@ -61,7 +61,7 @@ namespace PiClient {
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e) {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            
+
             int digitsOfPi = (int)e.Argument;
             calcPi(digitsOfPi);
 
@@ -79,13 +79,11 @@ namespace PiClient {
         private void btnBgWorker_Click(object sender, RoutedEventArgs e) {
             // Validate data first
             int digitsOfPi;
-            if(int.TryParse(txDigits.Text, out digitsOfPi))
-            {
-                if (!bgWorker.IsBusy)
-                {
+            if (int.TryParse(txDigits.Text, out digitsOfPi)) {
+                if (!bgWorker.IsBusy) {
                     bgWorker.RunWorkerAsync(digitsOfPi);
                 }
-            }            
+            }
         }
         #endregion
 
@@ -94,67 +92,44 @@ namespace PiClient {
             int digitsOfPi;
 
             // Validate input before anything else
-            if (int.TryParse(txDigits.Text, out digitsOfPi)){
-                
-                
+            if (int.TryParse(txDigits.Text, out digitsOfPi)) {
+
+
                 Task.Run(async () => {
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
                     calcPi(digitsOfPi);
                     stopwatch.Stop();
                     ElapsedTime = "Performance: " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
-                    await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);                    
+                    await lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);
                     MethodName = "cpu.Task";
                 });
             }
         }
         #endregion
 
-        private void test(object sender, RoutedEventArgs e) {
-            //Thread test = new Thread(paraTest);
-            //test.Start(int.Parse(txDigits.Text));
-        }
-
-        private void paraTest(object arg) {
-
-            //Stopwatch sw = new Stopwatch();
-
-            //sw.Start();
-            //Parallel.For(0, 1, i => {
-            //    calcPi((int)arg);
-            //    sw.Stop();
-            //    lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds);
-            //    // Should the sw.Stop() and performance data not occur outside the for loop? The code inside may be run in parallel, and we only want it to stop once.
-            //    // I haven't tested/debugged it though
-            //});
-        }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
             Debug.WriteLine(MethodName + "," + ElapsedTime);
             // Save to Database from here
         }
 
-        private void btnThreadPool_Click(object sender, RoutedEventArgs e)
-        {
+        private void btnThreadPool_Click(object sender, RoutedEventArgs e) {
             int digitsOfPi;
             int numberOfThreads = 1;        // This is a single-threaded non-parallelizable algorithm
             // Validate input before anything else
-            if (int.TryParse(txDigits.Text, out digitsOfPi))
-            {
+            if (int.TryParse(txDigits.Text, out digitsOfPi)) {
                 int newint = digitsOfPi;
-                Thread thread = new Thread(() =>
-                {
+                Thread thread = new Thread(() => {
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
                     AutoResetEvent done = new AutoResetEvent(false);
-                    
+
                     ThreadPool.QueueUserWorkItem(state => {
                         calcPi(digitsOfPi);
-                        if (0 == Interlocked.Decrement(ref numberOfThreads))
-                        {
+                        if (0 == Interlocked.Decrement(ref numberOfThreads)) {
                             done.Set();
                         }
-                    });                    
+                    });
                     done.WaitOne();
 
                     stopwatch.Stop();
@@ -166,28 +141,29 @@ namespace PiClient {
             }
         }
 
-        private void btnParallelFor_Click(object sender, RoutedEventArgs e)
-        {
+        private void btnParallelFor_Click(object sender, RoutedEventArgs e) {
+
             int digitsOfPi;
             int numberOfThreads = 1;         // This is a single-threaded non-parallelizable algorithm
 
             // Validate input before anything else
-            if (int.TryParse(txDigits.Text, out digitsOfPi))
-            {
+            if (int.TryParse(txDigits.Text, out digitsOfPi)) {
+                Thread thread = new Thread(() => { //to prevent blocking ui thread
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    Parallel.For(0, numberOfThreads, i => {
+                        calcPi(digitsOfPi);
+                    });
 
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                Parallel.For(0, numberOfThreads, i =>
-                {
-                    calcPi(digitsOfPi);
+                    stopwatch.Stop();
+                    ElapsedTime = "Performance: " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                    lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);
+                    MethodName = "cpu.ParallelFor";
                 });
+                thread.Start();
+            }
 
-                stopwatch.Stop();
-                ElapsedTime = "Performance: " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
-                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = ElapsedTime);
-                MethodName = "cpu.ParallelFor";
-            }            
+
         }
     }
 }
-    
