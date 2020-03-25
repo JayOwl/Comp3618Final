@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 
 namespace AsyncNumbersOfPi
 {
@@ -79,9 +80,24 @@ namespace AsyncNumbersOfPi
         private void WorkerThread_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             IsCalculating = false;
+            string workingDirectory = Environment.CurrentDirectory;
+            string filepath = Directory.GetParent(workingDirectory).Parent.FullName + "\\DB\\db.csv";           
+
             _calcButton.Text = "Calculate (Async)";
             StopWatch.Stop();
             TimeInfo.Text = StopWatch.ElapsedMilliseconds.ToString() + " ms elapsed. Operation complete.";
+
+            try
+            {       
+                using(System.IO.StreamWriter file = new System.IO.StreamWriter(@filepath, true))
+                {
+                    file.WriteLine(StopWatch.ElapsedMilliseconds.ToString());
+                }
+            }
+            catch(Exception ex)
+            {
+                 throw new ApplicationException("We couldn't record your time, please try again", ex);
+            }
             StopWatch.Reset();
         }
 
