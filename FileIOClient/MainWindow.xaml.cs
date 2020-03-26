@@ -40,7 +40,7 @@ namespace FileIOClient {
             #region change this later
             //watcher.Path = "C:\\finaltest";
             string workingDirectory = Environment.CurrentDirectory;
-            watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
+            watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\input";
             #endregion
             
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
