@@ -110,6 +110,14 @@ namespace PiClient {
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
             Debug.WriteLine(MethodName + "," + ElapsedTime);
+
+            using (var db = new PerformanceContext())
+            {
+                db.Add(new Speed { SpeedMS = ElapsedTime, Type = MethodName }); ; 
+
+                db.SaveChanges();
+            }
+
             // Save to Database from here
         }
 
@@ -163,6 +171,19 @@ namespace PiClient {
                 thread.Start();
             }
 
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //using (var db = new PerformanceContext())
+            //{
+            //    var performance = db.Speeds
+            //          .OrderBy(b => b.Type)
+            //          .First();
+
+            //    labelretrieve.Content = performance;
+            //}
 
         }
     }
