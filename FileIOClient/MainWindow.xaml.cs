@@ -38,9 +38,9 @@ namespace FileIOClient {
             Thread.CurrentThread.Name = "UI Thread";
 
             #region change this later
-            //watcher.Path = "C:\\finaltest";
-            string workingDirectory = Environment.CurrentDirectory;
-            watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
+            watcher.Path = "C:\\finaltest";
+            //string workingDirectory = Environment.CurrentDirectory;
+            //watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
             #endregion
             
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size;
@@ -92,7 +92,18 @@ namespace FileIOClient {
                 methodName = "io.Task";
                 elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
             });
+        }
 
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine(methodName + "," + elapsedTime);
+
+            using (var db = new PerformanceContext())
+            {
+                db.Add(new Speed { SpeedMS = elapsedTime, Type = methodName }); ;
+
+                db.SaveChanges();
+            }
 
         }
 
@@ -156,8 +167,53 @@ namespace FileIOClient {
             thread.Start();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e) {
-            Debug.WriteLine(methodName + "," + elapsedTime);
+        private void btnRetrieve_Click(object sender, RoutedEventArgs e)
+        {
+            using (var db = new PerformanceContext())
+            {
+                String comboBoxValue = ComboBox.Text;
+
+                if (comboBoxValue == "Task")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("io.Task")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " Speed " + performance.SpeedMS;
+                    }
+                }
+                if (comboBoxValue == "ThreadPool")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("io.Threadpool")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " Speed " + performance.SpeedMS;
+                    }
+                }
+                if (comboBoxValue == "Parallel.For")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("io.Parallel.For")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " Speed " + performance.SpeedMS;
+                    }
+                }
+                if (comboBoxValue == "Parallel Task")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("io.ParallelTask")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " Speed " + performance.SpeedMS;
+                    }
+                }
+            }
         }
     }
 }
