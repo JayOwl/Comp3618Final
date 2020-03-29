@@ -13,6 +13,7 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -34,17 +35,16 @@
         <Button Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Margin="10"  Click="btnParallelFor_Click">Parallel.For</Button>
 
         <Button Grid.Row="3" Grid.Column="0" Margin="5" Click="SaveButton_Click">Save</Button>
-        <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Name="lbPerformance" VerticalContentAlignment="Center"></Label>
+        <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Name="lbPerformance" VerticalContentAlignment="Center">current results ph</Label>
 
-        <Button Grid.Row="4" Grid.Column="0" Margin="5">Retrieve</Button>
-        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="2" VerticalAlignment="Center">
-            <ComboBoxItem IsSelected="True">Method1</ComboBoxItem>
-            <ComboBoxItem>Method2</ComboBoxItem>
-            <ComboBoxItem>Method3</ComboBoxItem>
-            <ComboBoxItem>Method4</ComboBoxItem>
-            <ComboBoxItem>Method5</ComboBoxItem>
+        <Button Grid.Row="4" Grid.Column="0" Margin="5" Click="btnRetrieve_Click">Retrieve</Button>
+        <ComboBox Name="ComboBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="2" VerticalAlignment="Center">
+            <ComboBoxItem IsSelected="True">Background Worker</ComboBoxItem>
+            <ComboBoxItem>Task</ComboBoxItem>
+            <ComboBoxItem>Thread Pool</ComboBoxItem>
+            <ComboBoxItem>Parallell For</ComboBoxItem>
         </ComboBox>
-        <Label Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" VerticalContentAlignment="Center"></Label>
+        <Label x:Name="labelretrieve" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" VerticalContentAlignment="Center">saved results ph</Label>
 
     </Grid>
 </Window>
