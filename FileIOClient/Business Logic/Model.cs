@@ -12,7 +12,7 @@ namespace FileIOClient
     {
         public DbSet<Speed> Speeds { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=speed.db");
+            => options.UseSqlite("Data Source=Data\\speed.db");
     }
 
     public class Speed
