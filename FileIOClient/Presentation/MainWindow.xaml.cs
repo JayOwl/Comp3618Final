@@ -123,28 +123,30 @@ namespace FileIOClient {
         }
 
         private void PoolButton_Click(object sender, RoutedEventArgs e) {
-            Thread thread = new Thread(() => {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
+            if (paths.Count > 0) {
+                Thread thread = new Thread(() => {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
 
-                int temp = paths.Count;
-                AutoResetEvent done = new AutoResetEvent(false);
-                foreach(string path in paths) {
-                    ThreadPool.QueueUserWorkItem(state => {
-                        GetFileLength(path);
-                        if (0 == Interlocked.Decrement(ref temp)) {
-                            done.Set();
-                        }
-                    });
-                }
-                done.WaitOne();
-                
-                sw.Stop();
-                lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
-                methodName = "io.Threadpool";
-                elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
-            });
-            thread.Start();
+                    int temp = paths.Count;
+                    AutoResetEvent done = new AutoResetEvent(false);
+                    foreach (string path in paths) {
+                        ThreadPool.QueueUserWorkItem(state => {
+                            GetFileLength(path);
+                            if (0 == Interlocked.Decrement(ref temp)) {
+                                done.Set();
+                            }
+                        });
+                    }
+                    done.WaitOne();
+
+                    sw.Stop();
+                    lbPerformance.Dispatcher.InvokeAsync(() => lbPerformance.Content = sw.ElapsedMilliseconds + "ms");
+                    methodName = "io.Threadpool";
+                    elapsedTime = sw.ElapsedMilliseconds.ToString() + "ms";
+                });
+                thread.Start();
+            }
         }
 
         private void ParaTaskButton_Click(object sender, RoutedEventArgs e) {
