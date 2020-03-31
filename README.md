@@ -1,5 +1,9 @@
 # COMP 3618 Project Patterns
 
+## Running the Project
+
+* Run each project sln file, the PIClient and the FileIOClient, individually. That will update the nuget packages properly.
+
 ## Built With
 
 * [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) - Database framework
