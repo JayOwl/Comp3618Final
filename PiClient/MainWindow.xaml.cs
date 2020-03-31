@@ -110,6 +110,14 @@ namespace PiClient {
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
             Debug.WriteLine(MethodName + "," + ElapsedTime);
+
+            using (var db = new PerformanceContext())
+            {
+                db.Add(new Speed { SpeedMS = ElapsedTime, Type = MethodName }); ; 
+
+                db.SaveChanges();
+            }
+
             // Save to Database from here
         }
 
@@ -164,6 +172,56 @@ namespace PiClient {
             }
 
 
+        }
+
+
+        private void btnRetrieve_Click(object sender, RoutedEventArgs e)
+        {          
+            using (var db = new PerformanceContext())
+            {
+                String comboBoxValue = ComboBox.Text;               
+
+                if (comboBoxValue == "Background Worker") 
+                {
+                    var performances = from p in db.Speeds
+                                        where p.Type.Equals("cpu.BackgroundWorker")
+                                        select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " " + performance.SpeedMS;
+                    }
+                }
+                if (comboBoxValue == "Task")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("cpu.Task")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " " + performance.SpeedMS;
+                    }
+                }
+                if (comboBoxValue == "Parallell For")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("cpu.ParallelFor")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " " + performance.SpeedMS;
+                    }
+                }
+                if (comboBoxValue == "Thread Pool")
+                {
+                    var performances = from p in db.Speeds
+                                       where p.Type.Equals("cpu.ThreadPool")
+                                       select p;
+                    foreach (var performance in performances)
+                    {
+                        labelretrieve.Content = "ID " + performance.SpeedId + " " + performance.SpeedMS;
+                    }
+                }                
+            }
         }
     }
 }
