@@ -19,3 +19,4 @@ See also the list of [contributors](https://github.com/JayOwl/Comp3618Final/grap
 
 * Thanks for to Eric and Nathan for the excellent communication as a group.
 * To the Gang of Four
+* Congrulations too Nathan on being a new uncle!
