@@ -38,7 +38,7 @@ namespace FileIOClient {
             Thread.CurrentThread.Name = "UI Thread";
 
             #region change this later
-            watcher.Path = "C:\\finaltest";
+            watcher.Path = @"G:\COMP3618\Comp3618Final\FileIOClient\finaltest";
             //string workingDirectory = Environment.CurrentDirectory;
             //watcher.Path = Directory.GetParent(workingDirectory).Parent.FullName + "\\finaltest";
             #endregion
