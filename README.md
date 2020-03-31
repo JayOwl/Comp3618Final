@@ -9,9 +9,9 @@
 
 ## Authors
 
-* **Nathan Chan** - *Initial work* - [PurpleBooth](https://github.com/ericb-bcit)
-* **Eric Blankers** - *Initial work* - [PurpleBooth](https://github.com/wetcoaster)
-* **Joel Benoit** - *Initial work* - [PurpleBooth](https://github.com/JayOwl)
+* **Nathan Chan** - *File IO* - [Wetcoaster](https://github.com/wetcoaster)
+* **Eric Blankers** - *Pi Calculations, UI* - [Eric B](https://github.com/ericb-bcit)
+* **Joel Benoit** - *Database* - [JayOwl](https://github.com/JayOwl)
 
 See also the list of [contributors](https://github.com/JayOwl/Comp3618Final/graphs/contributors) who participated in this project.
 
